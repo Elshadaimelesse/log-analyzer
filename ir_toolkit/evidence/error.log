@@ -1,0 +1,10 @@
+[Mon Jun 28 10:00:05.123456 2026] [error] [pid 1234] [client 10.0.0.5:44321] File does not exist: /var/www/html/admin
+[Mon Jun 28 10:00:10.234567 2026] [error] [pid 1235] [client 203.0.113.42:51234] File does not exist: /var/www/html/.env
+[Mon Jun 28 10:01:00.345678 2026] [error] [pid 1236] [client 45.33.32.156:33333] script '/var/www/html/sql' not found
+[Mon Jun 28 10:01:05.456789 2026] [error] [pid 1237] [client 45.33.32.156:33334] AH01276: Cannot serve directory /var/www/html/: No matching DirectoryIndex
+[Mon Jun 28 10:01:10.567890 2026] [error] [pid 1238] [client 1.2.3.4:55555] request failed: URI too long (longer than 8190)
+[Mon Jun 28 10:02:00.678901 2026] [error] [pid 1239] [client 1.2.3.4:55556] invalid URI in request GET /../../etc/passwd HTTP/1.1
+[Mon Jun 28 10:02:05.789012 2026] [error] [pid 1240] [client 1.2.3.4:55557] invalid request body: %00../../boot.ini
+[Mon Jun 28 10:03:00.890123 2026] [error] [pid 1241] [client 203.0.113.42:51235] PHP Fatal error: Uncaught PDOException: SQLSTATE[42000] in /var/www/html/db.php:45
+[Mon Jun 28 10:04:00.901234 2026] [crit]  [pid 1242] [client 45.33.32.156:33335] (13)Permission denied: /var/www/html/config.php
+[Mon Jun 28 10:05:00.012345 2026] [error] [pid 1243] [client 8.8.8.8:80] File does not exist: /var/www/html/favicon.ico

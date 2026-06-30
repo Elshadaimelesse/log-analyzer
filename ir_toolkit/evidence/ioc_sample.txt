@@ -1,0 +1,30 @@
+# IOC Sample Evidence File
+# Contains mixed indicators extracted from malware analysis / threat feeds
+
+Malicious IPs observed during incident:
+  45.33.32.156
+  1.2.3.4
+  203.0.113.42
+
+Suspicious domains contacted:
+  evil.onion
+  malware-c2.ru
+  update.windowsupdate-cdn.net
+
+Malware hashes:
+  MD5:    d41d8cd98f00b204e9800998ecf8427e
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+Email used in phishing:
+  attacker@malware-c2.ru
+
+CVEs referenced in exploit kit:
+  CVE-2021-44228
+  CVE-2023-23397
+
+Registry persistence key:
+  HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run\WindowsUpdate
+
+Download URL observed in memory dump:
+  https://malware-c2.ru/payload/stage2.exe
+  http://evil.onion/tools/backdoor.sh
