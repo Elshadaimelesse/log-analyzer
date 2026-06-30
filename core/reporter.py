@@ -99,6 +99,17 @@ def print_report(summary: ThreatSummary, log_path: str) -> None:
         print(f"  {_c(ip.ljust(18), 'white')}  {str(count).rjust(4)} requests{label}")
     print()
 
+    # ── Successful 200 access list ────────────────────────────────────────────
+    print(_c("  SUCCESSFUL 200 ACCESS LIST", "green"))
+    print(_c(_divider(), "white"))
+    if summary.ip_200_counts:
+        for ip, count in summary.ip_200_counts.most_common():
+            label = f"{count} successful request{'s' if count > 1 else ''}"
+            print(f"  {_c('✔', 'green')} {_c(ip.ljust(18), 'white')}  → {_c(label, 'green')}")
+    else:
+        print(_c("  No successful (200) requests found.", "yellow"))
+    print()
+
     # ── Brute force ───────────────────────────────────────────────────────────
     if summary.brute_force_ips:
         print(_c("  ⚠  BRUTE-FORCE ATTACKS DETECTED", "red"))
@@ -193,6 +204,14 @@ def save_text_report(summary: ThreatSummary, log_path: str, output_dir: str = "o
             lines.append(f"  {item['ip']}  →  {item['path']}")
             lines.append(f"      pattern: {item['pattern']}")
 
+    lines += ["", "  SUCCESSFUL 200 ACCESS LIST", "-" * 64]
+    if summary.ip_200_counts:
+        for ip, count in summary.ip_200_counts.most_common():
+            label = f"{count} successful request{'s' if count > 1 else ''}"
+            lines.append(f"  ✔  {ip.ljust(18)}  →  {label}")
+    else:
+        lines.append("  No successful (200) requests found.")
+
     if summary.suspicious_path_hits:
         lines += ["", "  SUSPICIOUS ENDPOINT ACCESS", "-" * 64]
         for item in summary.suspicious_path_hits:
@@ -247,8 +266,13 @@ def save_chart(summary: ThreatSummary, output_dir: str = "output") -> str | None
     }
     colors = ["#e74c3c" if ip in flagged else "#2980b9" for ip in ips]
 
+    # Reverse so highest count appears at the top of a horizontal bar chart
+    ips_r    = ips[::-1]
+    counts_r = counts[::-1]
+    colors_r = colors[::-1]
+
     fig, ax = plt.subplots(figsize=(10, 5))
-    bars = ax.barh(ips[::-1], counts[::-1], color=colors[::-1], edgecolor="white", linewidth=0.5)
+    bars = ax.barh(ips_r, counts_r, color=colors_r, edgecolor="white", linewidth=0.5)
     ax.set_xlabel("Request Count", fontsize=11)
     ax.set_title("Top IPs by Request Volume  (red = flagged threat)", fontsize=13, fontweight="bold")
     ax.set_facecolor("#1a1a2e")
@@ -258,7 +282,8 @@ def save_chart(summary: ThreatSummary, output_dir: str = "output") -> str | None
     ax.title.set_color("white")
     for spine in ax.spines.values():
         spine.set_edgecolor("#333355")
-    ax.bar_label(bars[::-1], labels=counts[::-1], padding=4, color="white", fontsize=9)
+    # bar_label requires the BarContainer object — never slice it
+    ax.bar_label(bars, padding=4, color="white", fontsize=9)
 
     plt.tight_layout()
     plt.savefig(chart_path, dpi=150, bbox_inches="tight")

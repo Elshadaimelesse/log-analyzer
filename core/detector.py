@@ -41,6 +41,9 @@ class ThreatSummary:
     # per-IP 404 counts
     ip_404_counts: Counter = field(default_factory=Counter)
 
+    # per-IP successful (200) counts
+    ip_200_counts: Counter = field(default_factory=Counter)
+
     # per-IP auth-endpoint hits (brute force)
     ip_auth_counts: Counter = field(default_factory=Counter)
 
@@ -74,6 +77,9 @@ def analyze(entries: list[LogEntry]) -> ThreatSummary:
 
         if entry.status == 404:
             summary.ip_404_counts[entry.ip] += 1
+
+        if entry.status == 200:
+            summary.ip_200_counts[entry.ip] += 1
 
         path_lower = entry.path.lower()
         if "/login" in path_lower or "/auth" in path_lower or "/signin" in path_lower:
