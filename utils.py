@@ -1,32 +1,19 @@
+# utils.py — legacy helpers (kept for reference)
+# The upgraded project uses core/ modules instead.
+# See core/parser.py and core/detector.py.
+
 import re
 from collections import Counter
 
+
 def extract_ips(logs):
-    ips = []
-    for line in logs:
-        match = re.findall(r'\d+\.\d+\.\d+\.\d+', line)
-        if match:
-            ips.append(match[0])
-    return ips
+    return [m[0] for line in logs for m in [re.findall(r'\d+\.\d+\.\d+\.\d+', line)] if m]
 
 
 def extract_status_codes(logs):
-    codes = []
-    for line in logs:
-        match = re.findall(r'"\s(\d{3})\s', line)
-        if match:
-            codes.append(match[0])
-    return codes
+    return [m[0] for line in logs for m in [re.findall(r'"\s(\d{3})\s', line)] if m]
 
 
 def detect_suspicious(logs):
     keywords = ["404", "500", "login", "admin", "sql", "error", "cmd", "bash"]
-    alerts = []
-
-    for line in logs:
-        for word in keywords:
-            if word in line.lower():
-                alerts.append(line)
-                break
-
-    return alerts
+    return [line for line in logs if any(k in line.lower() for k in keywords)]
